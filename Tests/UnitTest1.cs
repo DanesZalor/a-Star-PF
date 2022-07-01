@@ -22,7 +22,7 @@ public class UnitTest1
         Graph g = new Graph(
             new Vertex[]{
                 new Vertex(0, new Vector3(0,0,0)),
-                new Vertex(1, new Vector3(1,0,0))
+                new Vertex(0, new Vector3(1,0,0))
             },
             new uint[,]{
                 {0,1}

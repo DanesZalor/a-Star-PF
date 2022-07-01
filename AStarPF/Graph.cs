@@ -39,8 +39,13 @@ public class Graph{
                 Error("arg1: more edges than the complet graph of '"+Convert.ToString(verts.Length)+"' vertices");
         }
 
-        vertices = verts;
-        
+        for(int i = 0; i<verts.Length; i++){
+            for(int j = 0; j<verts.Length; j++)
+                if( i!=j && verts[i].Index == verts[j].Index)
+                    Error("vertices have duplicate indexes");  
+        }
+
+        vertices = verts;        
 
         for(uint i = 0; i<edges.GetLength(0); i++){
             uint v1 = edges[i,0];
