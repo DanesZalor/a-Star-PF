@@ -5,7 +5,21 @@ using System.Collections.Generic;
 
 public class Graph{
 
-    Vertex[] vertices;
+    public static string ToString(Graph g){
+        string output = "Graph:\n";
+
+        foreach(Vertex v in g.vertices){
+            string nbrsStr = "";
+
+            foreach(Vertex nbr in v.neighbors)
+                nbrsStr += String.Format("{0}, ",nbr.Index);
+
+            output += String.Format(" V:{0} [{1}]\n",v.Index, nbrsStr);
+        }
+
+        return output;
+    }
+    private Vertex[] vertices;
 
     public Graph(Vertex[] verts, uint[,] edges){
         
@@ -28,11 +42,14 @@ public class Graph{
         vertices = verts;
         
 
-        for(int i = 0; i<edges.Length; i++){
+        for(uint i = 0; i<edges.GetLength(0); i++){
             uint v1 = edges[i,0];
             uint v2 = edges[i,1];
 
-            if(
+            if( Math.Max(v1,v2)>verts.Length)
+                Error(String.Format("vertex index '{0}' doesn't exist", Math.Max(v1,v2)));
+            
+            else if(
                 vertices[v1].neighbors.Contains(vertices[v2]) ||
                 vertices[v2].neighbors.Contains(vertices[v1]) 
             ) Error("some edges are duplicated");

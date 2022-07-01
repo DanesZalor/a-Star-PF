@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/djdols/Projects/Coding/A*Pathfinding/AStarPF/AStarPF.csproj": {}
+    "/home/djdols/Projects/Coding/AStarPathFinding/AStarPF/AStarPF.csproj": {}
   },
   "projects": {
-    "/home/djdols/Projects/Coding/A*Pathfinding/AStarPF/AStarPF.csproj": {
+    "/home/djdols/Projects/Coding/AStarPathFinding/AStarPF/AStarPF.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/djdols/Projects/Coding/A*Pathfinding/AStarPF/AStarPF.csproj",
+        "projectUniqueName": "/home/djdols/Projects/Coding/AStarPathFinding/AStarPF/AStarPF.csproj",
         "projectName": "AStarPF",
-        "projectPath": "/home/djdols/Projects/Coding/A*Pathfinding/AStarPF/AStarPF.csproj",
+        "projectPath": "/home/djdols/Projects/Coding/AStarPathFinding/AStarPF/AStarPF.csproj",
         "packagesPath": "/home/djdols/.nuget/packages/",
-        "outputPath": "/home/djdols/Projects/Coding/A*Pathfinding/AStarPF/obj/",
+        "outputPath": "/home/djdols/Projects/Coding/AStarPathFinding/AStarPF/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/djdols/.nuget/NuGet/NuGet.Config"

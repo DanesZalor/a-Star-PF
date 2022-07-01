@@ -1,0 +1,12 @@
+/home/djdols/Projects/Coding/AStarPathFinding/AStarPF/bin/Debug/net6.0/AStarPF.deps.json
+/home/djdols/Projects/Coding/AStarPathFinding/AStarPF/bin/Debug/net6.0/AStarPF.dll
+/home/djdols/Projects/Coding/AStarPathFinding/AStarPF/bin/Debug/net6.0/ref/AStarPF.dll
+/home/djdols/Projects/Coding/AStarPathFinding/AStarPF/bin/Debug/net6.0/AStarPF.pdb
+/home/djdols/Projects/Coding/AStarPathFinding/AStarPF/obj/Debug/net6.0/AStarPF.csproj.AssemblyReference.cache
+/home/djdols/Projects/Coding/AStarPathFinding/AStarPF/obj/Debug/net6.0/AStarPF.GeneratedMSBuildEditorConfig.editorconfig
+/home/djdols/Projects/Coding/AStarPathFinding/AStarPF/obj/Debug/net6.0/AStarPF.AssemblyInfoInputs.cache
+/home/djdols/Projects/Coding/AStarPathFinding/AStarPF/obj/Debug/net6.0/AStarPF.AssemblyInfo.cs
+/home/djdols/Projects/Coding/AStarPathFinding/AStarPF/obj/Debug/net6.0/AStarPF.csproj.CoreCompileInputs.cache
+/home/djdols/Projects/Coding/AStarPathFinding/AStarPF/obj/Debug/net6.0/AStarPF.dll
+/home/djdols/Projects/Coding/AStarPathFinding/AStarPF/obj/Debug/net6.0/ref/AStarPF.dll
+/home/djdols/Projects/Coding/AStarPathFinding/AStarPF/obj/Debug/net6.0/AStarPF.pdb
