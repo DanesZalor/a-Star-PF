@@ -90,7 +90,6 @@ public class Graph{
         foreach(Vertex v in vertices){
             v.cost = null;
             v.visited = false;
-            v.consumed = false;
             v.prevVertex = null;
         }
 
@@ -168,9 +167,6 @@ public class Graph{
         shortestPath.Add(end);
 
         while(shortestPath[0] != start){
-            
-            shortestPath[0].consumed = true;
-
             shortestPath = shortestPath.Prepend(shortestPath[0].prevVertex).ToList();
         }
         
