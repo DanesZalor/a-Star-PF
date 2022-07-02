@@ -110,7 +110,9 @@ public class Graph{
             foreach(Vertex nbrv in curr.neighbors){
                 
                 if(nbrv.cost==null) nbrv.cost = new Vertex.Cost(
-                    Vector3.Subtract(start.Location, nbrv.Location).LengthSquared(),
+                     Vector3.Subtract(start.Location, curr.Location).LengthSquared() +
+                     Vector3.Subtract(curr.Location, nbrv.Location).LengthSquared()
+                    ,
                     Vector3.Subtract(end.Location, nbrv.Location).LengthSquared()
                 );
 
