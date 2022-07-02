@@ -1,4 +1,5 @@
 # A* Pathfinding
 
-My own implementation of A* because I need it for my game which uses a unique case where I use a mesh as a map.
+A vector based mapping path finding algorithm. The Graph will comprise of vertices each with their own Vector location to be used for the calculation of the Heuristics.
+
 

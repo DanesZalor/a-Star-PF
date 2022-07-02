@@ -98,7 +98,10 @@ public class UnitTest1
         // From 14 to 17
         Assert.Equal(g.getShortestPathIndexes(new Vector3(2,2,0), new Vector3(2,5,0)), new uint[]{13,7,12,16,19,26});
 
-        Console.WriteLine(g.printShortestPath(new Vector3(3,2,0), new Vector3(3,5,0)));
+        // from 7 to 23
+        Console.WriteLine(g.printShortestPath(new Vector3(1,1,0), new Vector3(5,4,0)));
+        //Assert.Equal(g.getShortestPathIndexes(new Vector3(1,1,0), new Vector3(5,4,0)), new uint[]{});
+
     }
 
 }
