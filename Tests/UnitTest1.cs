@@ -11,6 +11,7 @@ public class Map1Test
 {   
     private static Graph g;
     public Map1Test(){
+        //Console.WriteLine("setup");
         if(g!=null) return;
 
         g = new Graph(new (Vector3, uint[])[]{

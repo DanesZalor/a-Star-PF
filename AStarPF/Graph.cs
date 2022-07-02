@@ -112,13 +112,6 @@ public class Graph{
             // set all curr.neighbor's cost
             foreach(Vertex nbrv in curr.neighbors){
                 
-                
-                /*
-                float gcost_abs_dist = Vector3.Subtract(start.Location, nbrv.Location).LengthSquared();
-                float gcost_add_dist = 
-                    Vector3.Subtract(start.Location, curr.Location).LengthSquared() + 
-                    Vector3.Subtract(curr.Location, nbrv.Location).LengthSquared();
-                */
                 nbrv.cost = new Vertex.Cost(
                     Vector3.Subtract(start.Location, nbrv.Location).LengthSquared(),
                     Vector3.Subtract(end.Location, nbrv.Location).LengthSquared()
@@ -129,13 +122,6 @@ public class Graph{
                     || curr.cost.G < nbrv.prevVertex.cost.G
                 )
                     nbrv.prevVertex = curr;
-
-                // not sure if this is useful ngl
-                /*
-                else if( nbrv.prevVertex.prevVertex != null &&
-                    nbrv.neighbors.Contains(nbrv.prevVertex.prevVertex)
-                ) nbrv.prevVertex = nbrv.prevVertex.prevVertex;                
-                */
             }
 
             // among the unvisited but costed vertices
