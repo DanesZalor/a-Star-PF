@@ -109,16 +109,21 @@ public class Graph{
             // set all curr.neighbor's cost
             foreach(Vertex nbrv in curr.neighbors){
                 
-                if(nbrv.cost==null) nbrv.cost = new Vertex.Cost(
-                     Vector3.Subtract(start.Location, curr.Location).LengthSquared() +
-                     Vector3.Subtract(curr.Location, nbrv.Location).LengthSquared()
+                
+                float gcost_abs_dist = Vector3.Subtract(start.Location, nbrv.Location).LengthSquared();
+                float gcost_add_dist = 
+                    Vector3.Subtract(start.Location, curr.Location).LengthSquared() + 
+                    Vector3.Subtract(curr.Location, nbrv.Location).LengthSquared();
+                
+                nbrv.cost = new Vertex.Cost(
+                    MathF.Min(gcost_abs_dist, gcost_add_dist)
                     ,
                     Vector3.Subtract(end.Location, nbrv.Location).LengthSquared()
                 );
 
                 if(
                     nbrv.prevVertex==null 
-                    //curr.cost.G < nbrv.prevVertex.cost.G
+                    //curr.cost.G < nbrv.prevVertex.cost.Gs
                 )
                     nbrv.prevVertex = curr;
 
