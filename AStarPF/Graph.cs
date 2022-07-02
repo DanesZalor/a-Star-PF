@@ -163,18 +163,7 @@ public class Graph{
             
             shortestPath = shortestPath.Prepend(closestV).ToList<Vertex>();
         }
-
-        //Debug only - print all visited vertices
-        {
-            string vsv = "Visited: [";
-            foreach(Vertex v in vertices)
-            if(v.visited)
-                vsv += String.Format("{0}, ", v.Index);
-            vsv += "]";
-
-            Console.WriteLine(vsv);
-        }
-
+        
         return shortestPath;
     }
 
@@ -191,7 +180,7 @@ public class Graph{
     public string printShortestPath(Vector3 from, Vector3 to){
         List<Vertex> sp = getShortestPath(from, to);
 
-        string output = "Trail: [ ";
+        string output = String.Format("From {0} to {1}: [", getClosestVertex(from).Item1, getClosestVertex(to).Item1 );
         foreach(Vertex v in sp)
             output += String.Format("{0}-> ", v.Index); 
         

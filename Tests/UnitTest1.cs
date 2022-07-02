@@ -9,7 +9,6 @@ namespace Tests;
 
 public class UnitTest1
 {
-
     [Fact]
     public void Test2(){
         
@@ -65,10 +64,10 @@ public class UnitTest1
             (new Vector3(4,1,0), new uint[]{3,4,5,9,11,14,15}), 
             (new Vector3(5,1,0), new uint[]{4,5,10,15}), 
             // 12-15
-            (new Vector3(0,2,0), new uint[]{6,7,18}), 
+            (new Vector3(0,2,0), new uint[]{6,7,16}), 
             (new Vector3(2,2,0), new uint[]{7,8,9,14}), 
             (new Vector3(3,2,0), new uint[]{13,8,9,10}), 
-            (new Vector3(5,2,0), new uint[]{10,11,19}),
+            (new Vector3(5,2,0), new uint[]{10,11,17}),
             // 16-17
             (new Vector3(0,3,0), new uint[]{12,18,19}), 
             (new Vector3(5,3,0), new uint[]{15,22,23}), 
@@ -89,8 +88,17 @@ public class UnitTest1
         });
 
         Console.WriteLine(Graph.ToString(g));
-        Console.WriteLine(g.printShortestPath( new Vector3(3,0,0), new Vector3(2,5,0) ));
-        Assert.Equal(1,1);
+        
+        // From 3 to 26 (can actually have 2 shortest paths)
+        Assert.Equal(g.getShortestPathIndexes( new Vector3(3,0,0), new Vector3(2,5,0) ), new uint[]{3,8,7,12,16,19,26});
+        
+        // From 14 to 27
+        Assert.Equal(g.getShortestPathIndexes(new Vector3(3,2,0), new Vector3(3,5,0)), new uint[]{14,10,15,17,22,27});
+        
+        // From 14 to 17
+        Assert.Equal(g.getShortestPathIndexes(new Vector3(2,2,0), new Vector3(2,5,0)), new uint[]{13,7,12,16,19,26});
+
+        Console.WriteLine(g.printShortestPath(new Vector3(3,2,0), new Vector3(3,5,0)));
     }
 
 }
