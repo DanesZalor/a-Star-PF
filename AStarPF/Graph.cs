@@ -140,7 +140,7 @@ public class Graph{
         // all visited nodes form a single path now
 
         List<Vertex> shortestPath = new List<Vertex>();
-        shortestPath.Append(end);
+        shortestPath.Add(end);
 
         while(shortestPath[0] != start){
 
@@ -148,7 +148,7 @@ public class Graph{
             
             List<Vertex> visitedNeighbors = new List<Vertex>();
             foreach(Vertex v in shortestPath[0].neighbors)
-                if(v.visited) visitedNeighbors.Append(v);
+                if(v.visited) visitedNeighbors.Add(v);
             
             Vertex closestV = visitedNeighbors[0];
             for(int i = 1; i<visitedNeighbors.Count; i++)
@@ -159,6 +159,16 @@ public class Graph{
         }
 
         return shortestPath;
+    }
+
+    public uint[] getShortestPathIndexes(Vector3 from, Vector3 to){
+        List<Vertex> sp = getShortestPath(from, to);
+        uint[] pathIdx = new uint[sp.Count];
+
+        for(int i = 0; i<pathIdx.Length; i++)
+            pathIdx[i] = sp[i].Index;
+        
+        return pathIdx;
     }
 
     public string printShortestPath(Vector3 from, Vector3 to){

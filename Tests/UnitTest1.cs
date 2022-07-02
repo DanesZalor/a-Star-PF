@@ -45,7 +45,7 @@ public class UnitTest1
         });
 
         Console.WriteLine(Graph.ToString(g));
-        Console.WriteLine(g.getShortestPath( new Vector3(0,0,0), new Vector3(2,2,0) ));
+        Console.WriteLine(g.printShortestPath( new Vector3(0,0,0), new Vector3(2,2,0) ));
 
         Assert.Equal(1,1);
 
