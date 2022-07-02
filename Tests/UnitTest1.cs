@@ -98,8 +98,8 @@ public class UnitTest1
         // From 14 to 17
         Assert.Equal(g.getShortestPathIndexes(new Vector3(2,2,0), new Vector3(2,5,0)), new uint[]{13,7,12,16,19,26});
 
-        
-        //Assert.Equal(g.getShortestPathIndexes(new Vector3(1,1,0), new Vector3(5,4,0)), new uint[]{7,8,9,10,15,17,23}); 78
+        // from 7 to 23
+        Assert.Equal(g.getShortestPathIndexes(new Vector3(1,1,0), new Vector3(5,4,0)), new uint[]{7,8,9,10,15,17,23}); 
         
         
         // rubber banding cases

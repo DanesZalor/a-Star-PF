@@ -166,9 +166,9 @@ public class Graph{
         List<Vertex> shortestPath = new List<Vertex>();
         shortestPath.Add(end);
 
-        while(shortestPath[0] != start){
+        while(shortestPath[0] != start)
             shortestPath = shortestPath.Prepend(shortestPath[0].prevVertex).ToList();
-        }
+        
         
         return shortestPath;
     }
