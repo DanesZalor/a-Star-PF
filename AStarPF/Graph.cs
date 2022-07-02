@@ -83,6 +83,10 @@ public class Graph{
         return (closestIdx, vertices[closestIdx]);
     }
 
+    public Vector3 getVertexLocation(int idx){
+        return vertices[idx].Location;
+    }
+
     /// <return> List<Vertex> of the shortest path. Returns an empty list if there is no path </return>
     public List<Vertex> getShortestPath(Vector3 from, Vector3 to){
         
@@ -90,7 +94,7 @@ public class Graph{
         foreach(Vertex v in vertices){
             v.cost = null;
             v.visited = false;
-            v.consumed = false;
+            v.prevVertex = null;
         }
 
         Vertex start = getClosestVertex(from).Item2;
@@ -106,12 +110,19 @@ public class Graph{
             curr.visited = true;
 
             // set all curr.neighbor's cost
-            foreach(Vertex nbrv in curr.neighbors)
+            foreach(Vertex nbrv in curr.neighbors){
+                
                 nbrv.cost = new Vertex.Cost(
                     Vector3.Subtract(start.Location, nbrv.Location).LengthSquared(),
                     Vector3.Subtract(end.Location, nbrv.Location).LengthSquared()
                 );
-            
+
+                if(
+                    nbrv.prevVertex==null 
+                    || curr.cost.G < nbrv.prevVertex.cost.G
+                )
+                    nbrv.prevVertex = curr;
+            }
 
             // among the unvisited but costed vertices
             // set curr to be the one with the least F-cost
@@ -145,24 +156,9 @@ public class Graph{
         List<Vertex> shortestPath = new List<Vertex>();
         shortestPath.Add(end);
 
-        while(shortestPath[0] != start){
-            
-            shortestPath[0].consumed = true;
-
-            //Console.WriteLine(shortestPath.Count);
-            // among the visited neighbors, get the one closest to start
-            
-            List<Vertex> visitedNeighbors = new List<Vertex>();
-            foreach(Vertex v in shortestPath[0].neighbors)
-                if(v.visited && !v.consumed) visitedNeighbors.Add(v);
-            
-            Vertex closestV = visitedNeighbors[0];
-            for(int i = 1; i<visitedNeighbors.Count; i++)
-                if( visitedNeighbors[i].cost.G < closestV.cost.G )
-                    closestV = visitedNeighbors[i];
-            
-            shortestPath = shortestPath.Prepend(closestV).ToList<Vertex>();
-        }
+        while(shortestPath[0] != start)
+            shortestPath = shortestPath.Prepend(shortestPath[0].prevVertex).ToList();
+        
         
         return shortestPath;
     }
