@@ -126,9 +126,10 @@ public class Graph{
             Vertex leastF = unvisited_costed_vertices[0];
             for(int i=1; i<unvisited_costed_vertices.Count; i++){
                 if( 
-                    (unvisited_costed_vertices[i].cost.F < leastF.cost.F) ||
+                    (unvisited_costed_vertices[i].cost.H == 0) || // if its the end
+                    (unvisited_costed_vertices[i].cost.F < leastF.cost.F) || // get the lowest F cost
                     ( 
-                        unvisited_costed_vertices[i].cost.F == leastF.cost.F &&
+                        unvisited_costed_vertices[i].cost.F == leastF.cost.F && // 2nd prio is the H
                         unvisited_costed_vertices[i].cost.H < leastF.cost.H
                     )
                 )
@@ -148,7 +149,7 @@ public class Graph{
             
             shortestPath[0].consumed = true;
 
-            Console.WriteLine(shortestPath.Count);
+            //Console.WriteLine(shortestPath.Count);
             // among the visited neighbors, get the one closest to start
             
             List<Vertex> visitedNeighbors = new List<Vertex>();
@@ -161,6 +162,17 @@ public class Graph{
                     closestV = visitedNeighbors[i];
             
             shortestPath = shortestPath.Prepend(closestV).ToList<Vertex>();
+        }
+
+        //Debug only - print all visited vertices
+        {
+            string vsv = "Visited: [";
+            foreach(Vertex v in vertices)
+            if(v.visited)
+                vsv += String.Format("{0}, ", v.Index);
+            vsv += "]";
+
+            Console.WriteLine(vsv);
         }
 
         return shortestPath;
