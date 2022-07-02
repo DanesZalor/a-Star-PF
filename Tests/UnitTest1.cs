@@ -29,14 +29,13 @@ public class UnitTest1
         // arrange
 
         Graph g = new Graph(new (Vector3, uint[])[]{
-            
             (new Vector3(0,0,0), new uint[]{1,4}), 
             (new Vector3(1,0,0), new uint[]{0,2}),
             (new Vector3(2,0,0), new uint[]{1,3}),
             (new Vector3(3,0,0), new uint[]{2,5}),
 
-            (new Vector3(0,1,0), new uint[]{0,6}),
-            (new Vector3(3,1,0), new uint[]{3,9}),
+            (new Vector3(0,1,0), new uint[]{0,1,6,7}),
+            (new Vector3(3,1,0), new uint[]{2,3,8,9}),
 
             (new Vector3(0,2,0), new uint[]{4,7}),
             (new Vector3(1,2,0), new uint[]{6,8}),
