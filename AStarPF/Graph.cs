@@ -83,6 +83,10 @@ public class Graph{
         return (closestIdx, vertices[closestIdx]);
     }
 
+    public Vector3 getVertexLocation(int idx){
+        return vertices[idx].Location;
+    }
+
     /// <return> List<Vertex> of the shortest path. Returns an empty list if there is no path </return>
     public List<Vertex> getShortestPath(Vector3 from, Vector3 to){
         

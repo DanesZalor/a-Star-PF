@@ -7,48 +7,13 @@ using System;
 
 namespace Tests;
 
-public class UnitTest1
-{
-    [Fact]
-    public void Test2(){
-        
-        Graph g = new Graph(new (Vector3, uint[])[]{
-            (new Vector3(0,0,0), new uint[]{1,2}),
-            (new Vector3(0,1,0), new uint[]{2}),
-            (new Vector3(1,0,0), new uint[]{}),
-        });
+public class Map1Test
+{   
+    private static Graph g;
+    public Map1Test(){
+        if(g!=null) return;
 
-        //Console.WriteLine(Graph.ToString(g));
-
-        Assert.Equal(1,1);
-    }
-
-    [Fact] public void TestingSP1(){
-
-        Graph g = new Graph(new (Vector3, uint[])[]{
-            (new Vector3(0,0,0), new uint[]{1,4}), 
-            (new Vector3(1,0,0), new uint[]{0,2}),
-            (new Vector3(2,0,0), new uint[]{1,3}),
-            (new Vector3(3,0,0), new uint[]{2,5}),
-
-            (new Vector3(0,1,0), new uint[]{0,1,6,7}),
-            (new Vector3(3,1,0), new uint[]{2,3,8,9}),
-
-            (new Vector3(0,2,0), new uint[]{4,7}),
-            (new Vector3(1,2,0), new uint[]{6,8}),
-            (new Vector3(2,2,0), new uint[]{7,9}),
-            (new Vector3(3,2,0), new uint[]{5,8}),
-        });
-
-        //Console.WriteLine(Graph.ToString(g));
-        //Console.WriteLine(g.printShortestPath( new Vector3(0,0,0), new Vector3(2,2,0) ));
-
-        Assert.Equal(g.getShortestPathIndexes(new Vector3(0,0,0), new Vector3(2,2,0)), new uint[]{0,4,7,8});
-    }
-
-    [Fact] public void TestingSP2(){
-
-        Graph g = new Graph(new (Vector3, uint[])[]{
+        g = new Graph(new (Vector3, uint[])[]{
             // 0-5
             (new Vector3(0,0,0), new uint[]{1,6,7}), 
             (new Vector3(1,0,0), new uint[]{0,2,6,7,8}), 
@@ -88,27 +53,35 @@ public class UnitTest1
         });
 
         Console.WriteLine(Graph.ToString(g));
-        
-        // From 3 to 26 (can actually have 2 shortest paths)
-        Assert.Equal(g.getShortestPathIndexes( new Vector3(3,0,0), new Vector3(2,5,0) ), new uint[]{3,8,7,12,16,19,26});
-        
-        // From 14 to 27
-        Assert.Equal(g.getShortestPathIndexes(new Vector3(3,2,0), new Vector3(3,5,0)), new uint[]{14,10,15,17,22,27});
-        
-        // From 14 to 17
-        Assert.Equal(g.getShortestPathIndexes(new Vector3(2,2,0), new Vector3(2,5,0)), new uint[]{13,7,12,16,19,26});
-
-        // from 7 to 23
-        Assert.Equal(g.getShortestPathIndexes(new Vector3(1,1,0), new Vector3(5,4,0)), new uint[]{7,8,9,10,15,17,23}); 
-        
-        
-        // rubber banding cases
-        // From 7 to 23
-        // From 12 to 15
-        
-        Console.WriteLine(g.printShortestPath(new Vector3(1,1,0), new Vector3(5,4,0)));
-        
-
     }
+
+    [Theory] 
+    [InlineData( 3, 26,  new uint[]{3,8,7,12,16,19,26} )]
+    [InlineData( 14, 27, new uint[]{14,10,15,17,22,27} )]
+    [InlineData( 13, 26, new uint[]{13,7,12,16,19,26} )]
+    [InlineData( 7, 23,  new uint[]{7,8,9,10,15,17,23} )]
+    
+    public void TestingSP2(int from, int to, uint[] expected_res){
+
+        uint[] actual_res = g.getShortestPathIndexes(
+            g.getVertexLocation(from),
+            g.getVertexLocation(to)
+        );
+        
+        try{
+            Assert.Equal(expected_res, actual_res);
+        }catch(Exception e){
+            throw new Exception(String.Format(
+                "\n\tEXPECT: [{0}]\n\tACTUAL: [{1}]\n", 
+                string.Join(",",expected_res), string.Join(",",actual_res) 
+            ));
+        }
+    }
+
+    /** REMARKS : Shows cases of rubber banding 
+            [Case 1]:  (12 to 15)
+                best   res: {12,7,8,9,10,15)
+                actual res: (12,7,13,14,10,15) 
+    */
 
 }
