@@ -120,12 +120,11 @@ public class Graph{
                 )
                     nbrv.prevVertex = curr;
 
-                /*
-                if(
-                    nbrv.prevVertex != null && nbrv.prevVertex.prevVertex != null &&
+                // not sure if this is useful ngl
+                else if( nbrv.prevVertex.prevVertex != null &&
                     nbrv.neighbors.Contains(nbrv.prevVertex.prevVertex)
                 ) nbrv.prevVertex = nbrv.prevVertex.prevVertex;                
-                */
+                
             }
 
             // among the unvisited but costed vertices
