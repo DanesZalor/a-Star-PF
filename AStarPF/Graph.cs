@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 public class Graph{
 
+    /// <summary> for Debug/Developement only </summary>
     public static string ToString(Graph g){
         string output = "Graph:\n";
 
@@ -15,61 +16,162 @@ public class Graph{
             foreach(Vertex nbr in v.neighbors)
                 nbrsStr += String.Format("{0}, ",nbr.Index);
 
-            output += String.Format(" V:{0} [{1}]\n",v.Index, nbrsStr);
+
+            // remove the last comma if any
+            if(nbrsStr.Length>0) nbrsStr = nbrsStr.Substring(0,nbrsStr.Length - 2);
+
+            output += String.Format("{0} [{1}]\n",v.Index, nbrsStr);
         }
 
         return output;
     }
+
     private Vertex[] vertices;
 
-    public Graph(Vector3[] vecs, uint[,] edges){
-        
+    public Graph((Vector3, uint[])[] nodes){
         void Error(string msg){
             throw new Exception(
-                String.Format("Error @ Graph.Graph(Vertex[], uint[,]): {0}",msg)
+                String.Format("!!@Graph.constructor(): {0}",msg)
             );
         }
 
-        /* Evaluate arguements*/{
-            int edges_limit = (vecs.Length*(vecs.Length-1))/2;
+        
+        { // VALIDATE 
 
-            if(edges.GetLength(1) != 2)
-                Error("arg1 should be a uint[n,2]");
-            
-            else if( edges.GetLength(0) > edges_limit )
-                // theoretically, the maximum length[1] of edges should be <= n(n-1)/2
-                Error(
-                    String.Format(
-                        "arg1: more edges than the complete graph of '{0}' vertices",vecs.Length
-                    )
-                );
-            
-            else if(edges.GetLength(0) == edges_limit )
-                Error("appears to be a complete graph. Path finding is obsolete");
+            if(nodes == null || nodes.Length==0)
+                Error("arg0 cannot be empty");
+
+            foreach( (Vector3, uint[]) node in nodes){
+                foreach( (Vector3, uint[]) node2 in nodes){
+                    
+                    // if practically the same point
+                    if( 
+                        node != node2 &&
+                        Vector3.Subtract(node.Item1, node2.Item1).Length() <= 0f
+                    ) Error("2 or more vectors have equal points");
+                }
+            }
             
         }
 
-        // set up the vertices
-        vertices = new Vertex[vecs.Length];
-        for(uint i = 0; i<vecs.Length; i++)
-            vertices[i] = new Vertex(i, vecs[i]);
+        vertices = new Vertex[nodes.Length];
 
-        for(uint i = 0; i<edges.GetLength(0); i++){
-            uint v1 = edges[i,0];
-            uint v2 = edges[i,1];
-
-            if( Math.Max(v1,v2)>vecs.Length)
-                Error(String.Format("vertex index '{0}' doesn't exist", Math.Max(v1,v2)));
-            
-            else if(
-                vertices[v1].neighbors.Contains(vertices[v2]) ||
-                vertices[v2].neighbors.Contains(vertices[v1]) 
-            ) Error("some edges are duplicated");
-            
-            vertices[v1].neighbors.Add(vertices[v2]);
-            vertices[v2].neighbors.Add(vertices[v1]);
+        // initialize vertices
+        for(uint i = 0; i<nodes.Length; i++)
+            vertices[i] = new Vertex(i, nodes[i].Item1);
+        
+        // set vertices neighbors
+        for(uint i = 0; i<nodes.Length; i++){
+            foreach(uint ndx in nodes[i].Item2)
+                if(ndx!= i && !vertices[i].neighbors.Contains(vertices[ndx])){
+                    vertices[i].neighbors.Add(vertices[ndx]);
+                    vertices[ndx].neighbors.Add(vertices[i]);
+                }
         }
     }
-    
+
+    private (int, Vertex) getClosestVertex(Vector3 from){
+        
+        int closestIdx = 0;
+
+        for(int i = 1; i<vertices.Length; i++)
+            if( 
+                Vector3.Subtract(from, vertices[i].Location).LengthSquared() <
+                Vector3.Subtract(from, vertices[closestIdx].Location).LengthSquared()
+            ) closestIdx = i;
+        
+        return (closestIdx, vertices[closestIdx]);
+    }
+
+    /// <return> List<Vertex> of the shortest path. Returns an empty list if there is no path </return>
+    public List<Vertex> getShortestPath(Vector3 from, Vector3 to){
+        
+        // reset costs
+        foreach(Vertex v in vertices){
+            v.cost = null;
+            v.visited = false;
+        }
+
+        Vertex start = getClosestVertex(from).Item2;
+        Vertex end = getClosestVertex(to).Item2;
+
+        start.cost = new Vertex.Cost(0, Vector3.Subtract(start.Location, end.Location).LengthSquared());
+        //end.cost = new Vertex.Cost(start.cost.H, 0);
+
+        Vertex curr = start;
+
+        while(curr!=end){
+            
+            curr.visited = true;
+
+            // set all curr.neighbor's cost
+            foreach(Vertex nbrv in curr.neighbors)
+                nbrv.cost = new Vertex.Cost(
+                    Vector3.Subtract(start.Location, nbrv.Location).LengthSquared(),
+                    Vector3.Subtract(end.Location, nbrv.Location).LengthSquared()
+                );
+            
+
+            // among the unvisited but costed vertices
+            // set curr to be the one with the least F-cost
+            List<Vertex> unvisited_costed_vertices = new List<Vertex>();
+            foreach(Vertex v in vertices)
+                if(!v.visited && v.cost != null)
+                    unvisited_costed_vertices.Add(v);
+            
+            if(unvisited_costed_vertices.Count==0)
+                return new List<Vertex>();
+
+            Vertex leastF = unvisited_costed_vertices[0];
+            for(int i=1; i<unvisited_costed_vertices.Count; i++){
+                if( 
+                    (unvisited_costed_vertices[i].cost.F < leastF.cost.F) ||
+                    ( 
+                        unvisited_costed_vertices[i].cost.F == leastF.cost.F &&
+                        unvisited_costed_vertices[i].cost.H < leastF.cost.H
+                    )
+                )
+                    leastF = unvisited_costed_vertices[i];
+            }
+
+            curr = leastF;
+        }
+
+        // all visited nodes form a single path now
+
+        List<Vertex> shortestPath = new List<Vertex>();
+        shortestPath.Append(end);
+
+        while(shortestPath[0] != start){
+
+            // among the visited neighbors, get the one closest to start
+            
+            List<Vertex> visitedNeighbors = new List<Vertex>();
+            foreach(Vertex v in shortestPath[0].neighbors)
+                if(v.visited) visitedNeighbors.Append(v);
+            
+            Vertex closestV = visitedNeighbors[0];
+            for(int i = 1; i<visitedNeighbors.Count; i++)
+                if( visitedNeighbors[i].cost.G < closestV.cost.G )
+                    closestV = visitedNeighbors[i];
+            
+            shortestPath = shortestPath.Prepend(closestV).ToList<Vertex>();
+        }
+
+        return shortestPath;
+    }
+
+    public string printShortestPath(Vector3 from, Vector3 to){
+        List<Vertex> sp = getShortestPath(from, to);
+
+        string output = "Trail: [ ";
+        foreach(Vertex v in sp)
+            output += String.Format("{0}-> ", v.Index); 
+        
+        output = output + "]";
+
+        return output;
+    }
+
 }
 
