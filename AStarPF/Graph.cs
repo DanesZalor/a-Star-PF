@@ -115,10 +115,17 @@ public class Graph{
                 );
 
                 if(
-                    nbrv.prevVertex==null ||
-                    curr.cost.G < nbrv.prevVertex.cost.G
+                    nbrv.prevVertex==null 
+                    //curr.cost.G < nbrv.prevVertex.cost.G
                 )
-                    nbrv.prevVertex = curr;                
+                    nbrv.prevVertex = curr;
+
+                /*
+                if(
+                    nbrv.prevVertex != null && nbrv.prevVertex.prevVertex != null &&
+                    nbrv.neighbors.Contains(nbrv.prevVertex.prevVertex)
+                ) nbrv.prevVertex = nbrv.prevVertex.prevVertex;                
+                */
             }
 
             // among the unvisited but costed vertices
