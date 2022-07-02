@@ -24,6 +24,7 @@ public class Vertex{
     // changeable states
     public Cost? cost;
     public bool visited = false;
+    public bool consumed = false;
 
     public Vertex(uint idx, Vector3 loc){
         _index = idx;

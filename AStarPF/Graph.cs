@@ -90,6 +90,7 @@ public class Graph{
         foreach(Vertex v in vertices){
             v.cost = null;
             v.visited = false;
+            v.consumed = false;
         }
 
         Vertex start = getClosestVertex(from).Item2;
@@ -137,18 +138,22 @@ public class Graph{
             curr = leastF;
         }
 
+        curr.visited = true;
         // all visited nodes form a single path now
 
         List<Vertex> shortestPath = new List<Vertex>();
         shortestPath.Add(end);
 
         while(shortestPath[0] != start){
+            
+            shortestPath[0].consumed = true;
 
+            Console.WriteLine(shortestPath.Count);
             // among the visited neighbors, get the one closest to start
             
             List<Vertex> visitedNeighbors = new List<Vertex>();
             foreach(Vertex v in shortestPath[0].neighbors)
-                if(v.visited) visitedNeighbors.Add(v);
+                if(v.visited && !v.consumed) visitedNeighbors.Add(v);
             
             Vertex closestV = visitedNeighbors[0];
             for(int i = 1; i<visitedNeighbors.Count; i++)
