@@ -102,6 +102,7 @@ public class UnitTest1
         Assert.Equal(g.getShortestPathIndexes(new Vector3(1,1,0), new Vector3(5,4,0)), new uint[]{7,8,9,10,15,17,23});
         
         // From 12 to 15
+        // rubber banding case
         Console.WriteLine(g.printShortestPath(new Vector3(0,2,0), new Vector3(5,2,0)));
         
 
