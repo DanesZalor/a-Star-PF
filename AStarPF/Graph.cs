@@ -91,6 +91,7 @@ public class Graph{
             v.cost = null;
             v.visited = false;
             v.consumed = false;
+            v.prevVertex = null;
         }
 
         Vertex start = getClosestVertex(from).Item2;
@@ -106,12 +107,19 @@ public class Graph{
             curr.visited = true;
 
             // set all curr.neighbor's cost
-            foreach(Vertex nbrv in curr.neighbors)
-                nbrv.cost = new Vertex.Cost(
+            foreach(Vertex nbrv in curr.neighbors){
+                
+                if(nbrv.cost==null) nbrv.cost = new Vertex.Cost(
                     Vector3.Subtract(start.Location, nbrv.Location).LengthSquared(),
                     Vector3.Subtract(end.Location, nbrv.Location).LengthSquared()
                 );
-            
+
+                if(
+                    nbrv.prevVertex==null ||
+                    curr.cost.G < nbrv.prevVertex.cost.G
+                )
+                    nbrv.prevVertex = curr;                
+            }
 
             // among the unvisited but costed vertices
             // set curr to be the one with the least F-cost
@@ -149,8 +157,9 @@ public class Graph{
             
             shortestPath[0].consumed = true;
 
-            //Console.WriteLine(shortestPath.Count);
-            // among the visited neighbors, get the one closest to start
+            shortestPath = shortestPath.Prepend(shortestPath[0].prevVertex).ToList();
+            
+            /* among the visited neighbors, get the one closest to start
             
             List<Vertex> visitedNeighbors = new List<Vertex>();
             foreach(Vertex v in shortestPath[0].neighbors)
@@ -162,6 +171,7 @@ public class Graph{
                     closestV = visitedNeighbors[i];
             
             shortestPath = shortestPath.Prepend(closestV).ToList<Vertex>();
+            */
         }
         
         return shortestPath;
