@@ -53,7 +53,7 @@ public class Map1Test
             (new Vector3(5,5,0), new uint[]{28,22,23}),
         });
 
-        Console.WriteLine(Graph.ToString(g));
+        //Console.WriteLine(Graph.ToString(g));
     }
 
     [Theory] 
