@@ -96,6 +96,7 @@ public class Map2Test
     [InlineData(0, 5, new uint[]{0,1,2,3,4,5})]
     [InlineData(79, 81, new uint[]{79,61,80,81})]
     [InlineData(130, 131, new uint[]{130,113,96,79,61,80,97,114,131})]
+    [InlineData(130, 140, new uint[]{})] // the rubber banding case
     public void TestingSP2(int from, int to, uint[] expected_res){
 
         uint[] actual_res = g.getShortestPathIndexes(
