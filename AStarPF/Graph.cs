@@ -169,6 +169,9 @@ public class Graph{
 
     public uint[] getShortestPathIndexes(Vector3 from, Vector3 to){
         List<Vertex> sp = getShortestPath(from, to);
+
+        // shorten the path
+
         uint[] pathIdx = new uint[sp.Count];
 
         for(int i = 0; i<pathIdx.Length; i++)
