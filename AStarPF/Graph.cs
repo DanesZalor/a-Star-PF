@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 public class Graph{
 
+    public static bool VERBOSE = false; 
     /// <summary> for Debug/Developement only </summary>
     public static string ToString(Graph g){
         string output = "Graph:\n";
@@ -119,7 +120,10 @@ public class Graph{
 
                 if(
                     nbrv.prevVertex==null 
-                    || curr.cost.G < nbrv.prevVertex.cost.G
+                    || (
+                        curr.cost.G < nbrv.prevVertex.cost.G &&
+                        curr.cost.H > nbrv.prevVertex.cost.H
+                    )
                 )
                     nbrv.prevVertex = curr;
             }
@@ -156,9 +160,9 @@ public class Graph{
         List<Vertex> shortestPath = new List<Vertex>();
         shortestPath.Add(end);
 
-        while(shortestPath[0] != start)
+        while(shortestPath[0] != start && shortestPath.Count <= vertices.Length){
             shortestPath = shortestPath.Prepend(shortestPath[0].prevVertex).ToList();
-        
+        }
         
         return shortestPath;
     }
