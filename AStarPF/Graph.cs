@@ -88,13 +88,13 @@ public class Graph{
     /// heat map based path finding
     public List<Vertex> getShortestPath(Vector3 from, Vector3 to){
         
-        // init
-        Cost[] costs = new Cost[vertices.Length];
-        bool[] visited = new bool[vertices.Length];
-        uint[] prevVertex = new uint[vertices.Length];
-
-        // reset costs
-        foreach(Vertex v in vertices) v.prevVertex = null;
+        // Initialization
+        
+            // H and G costs for vertices
+            Cost[] costs = new Cost[vertices.Length];
+            bool[] visited = new bool[vertices.Length];
+            // index of the prevVertex of each vertex. -1 means not set
+            int[] prevVertex = new int[vertices.Length]; Array.Fill(prevVertex, -1);
         
 
         Vertex start = getClosestVertex(from);
@@ -110,7 +110,8 @@ public class Graph{
             foreach(Vertex cnbr in curr.neighbors){
                 
                 Cost tempcost = new Cost(
-                    (curr.prevVertex != null ? costs[curr.prevVertex.Index].G : 0)  
+                    //(curr.prevVertex != null ? costs[curr.prevVertex.Index].G : 0)
+                    (prevVertex[curr.Index] != -1 ? costs[prevVertex[curr.Index]].G : 0)
                     + Vector3.Subtract(curr.Location, cnbr.Location).LengthSquared(),  
                     Vector3.Subtract(curr.Location, end.Location).LengthSquared()
                 );
@@ -119,13 +120,13 @@ public class Graph{
                     costs[cnbr.Index] = tempcost;
 
                 if(
-                    cnbr.prevVertex == null ||
-                    //prevVertex[cnbr.Index] == null ||
-                    costs[curr.Index].G < costs[cnbr.prevVertex.Index].G 
-                    //costs[curr.Index].G < costs[prevVertex[cnbr.Index]].G 
+                    //cnbr.prevVertex == null ||
+                    prevVertex[cnbr.Index] == -1 ||
+                    //costs[curr.Index].G < costs[cnbr.prevVertex.Index].G 
+                    costs[curr.Index].G < costs[prevVertex[cnbr.Index]].G 
                 )
-                    cnbr.prevVertex = curr;
-                    //prevVertex[cnbr.Index] = curr.Index;
+                    //cnbr.prevVertex = curr;
+                    prevVertex[cnbr.Index] = (int)curr.Index;
             }
 
             visited[curr.Index] = true;
@@ -145,7 +146,12 @@ public class Graph{
         List<Vertex> shortestPath = new List<Vertex>(new Vertex[]{end});
 
         while(shortestPath[0] != start && shortestPath.Count <= vertices.Length)
-            shortestPath = shortestPath.Prepend(shortestPath[0].prevVertex).ToList();
+            //shortestPath = shortestPath.Prepend(shortestPath[0].prevVertex).ToList();
+            shortestPath = shortestPath.Prepend(
+                vertices[
+                    prevVertex[shortestPath[0].Index]
+                ]
+            ).ToList();
                 
         return shortestPath;
     }
