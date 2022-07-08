@@ -57,10 +57,11 @@ public class Map1Test
     }
 
     [Theory] 
-    [InlineData( 3, 26,  new uint[]{3,8,7,12,16,19,26} )]
+    //[InlineData( 3, 26,  new uint[]{3,8,7,12,16,19,26} )] // ambiguous result but still correct 
     [InlineData( 14, 27, new uint[]{14,10,15,17,22,27} )]
     [InlineData( 13, 26, new uint[]{13,7,12,16,19,26} )]
     [InlineData( 7, 23,  new uint[]{7,8,9,10,15,17,23} )]
+    [InlineData( 12, 15,  new uint[]{12,7,8,9,10,15} )]
     
     public void TestingSP2(int from, int to, uint[] expected_res){
 
@@ -78,11 +79,5 @@ public class Map1Test
             ));
         }
     }
-
-    /** REMARKS : Shows cases of rubber banding 
-            [Case 1]:  (12 to 15)
-                best   res: {12,7,8,9,10,15)
-                actual res: (12,7,13,14,10,15) 
-    */
 
 }

@@ -89,6 +89,7 @@ public class Graph{
     }
 
     /// <return> List<Vertex> of the shortest path. Returns an empty list if there is no path </return>
+    /*
     public List<Vertex> getShortestPath(Vector3 from, Vector3 to){
         
         // reset costs
@@ -164,6 +165,68 @@ public class Graph{
             shortestPath = shortestPath.Prepend(shortestPath[0].prevVertex).ToList();
         }
         
+        return shortestPath;
+    }*/
+
+    /// heat map based path finding
+    public List<Vertex> getShortestPath(Vector3 from, Vector3 to){
+        // reset costs
+        foreach(Vertex v in vertices){
+            v.cost = null;
+            v.visited = false;
+            v.prevVertex = null;
+        }
+
+        Vertex start = getClosestVertex(from).Item2;
+        Vertex end = getClosestVertex(to).Item2;
+
+        Vertex curr = start;
+
+        curr.cost = new Vertex.Cost(0, Vector3.Subtract(curr.Location, end.Location).LengthSquared());
+
+        int numOfVisited = 0;
+
+        while(numOfVisited <= vertices.Length){
+            // assign cost to curr.neighbors
+            foreach(Vertex cnbr in curr.neighbors){
+                
+                Vertex.Cost tempcost = new Vertex.Cost(
+                    (curr.prevVertex != null ? curr.prevVertex.cost.G : 0) 
+                    + Vector3.Subtract(curr.Location, cnbr.Location).LengthSquared(),  
+                    Vector3.Subtract(curr.Location, end.Location).LengthSquared()
+                );
+
+                if(cnbr.cost == null || tempcost.G < cnbr.cost.G ) cnbr.cost = tempcost;
+
+                if(
+                    cnbr.prevVertex == null ||
+                    curr.cost.G < cnbr.prevVertex.cost.G 
+                )
+                    cnbr.prevVertex = curr;
+            }
+
+            curr.visited = true;
+            List<Vertex> unvisited_costed_vertices = new List<Vertex>();
+            foreach(Vertex v in vertices)
+                if(!v.visited && v.cost != null) unvisited_costed_vertices.Add(v);
+            
+            if(unvisited_costed_vertices.Count <= 0) break;
+
+            Vertex leastF = unvisited_costed_vertices[0];
+            foreach(Vertex ucv in unvisited_costed_vertices)
+                if(ucv.cost.F < leastF.cost.F) leastF = ucv;
+
+            numOfVisited++;
+
+            curr = leastF;
+        }
+
+        List<Vertex> shortestPath = new List<Vertex>();
+        shortestPath.Add(end);
+
+        while(shortestPath[0] != start && shortestPath.Count <= vertices.Length)
+            shortestPath = shortestPath.Prepend(shortestPath[0].prevVertex).ToList();
+                
         return shortestPath;
     }
 
