@@ -87,50 +87,57 @@ public class Graph{
 
     /// heat map based path finding
     public List<Vertex> getShortestPath(Vector3 from, Vector3 to){
+        
+        // init
+        Cost[] costs = new Cost[vertices.Length];
+        bool[] visited = new bool[vertices.Length];
+        uint[] prevVertex = new uint[vertices.Length];
+
         // reset costs
-        foreach(Vertex v in vertices){
-            v.cost = null;
-            v.visited = false;
-            v.prevVertex = null;
-        }
+        foreach(Vertex v in vertices) v.prevVertex = null;
+        
 
         Vertex start = getClosestVertex(from);
         Vertex end = getClosestVertex(to);
 
         Vertex curr = start;
 
-        curr.cost = new Vertex.Cost(0, Vector3.Subtract(curr.Location, end.Location).LengthSquared());
+        costs[curr.Index] = new Cost(0, Vector3.Subtract(curr.Location, end.Location).LengthSquared());
 
 
-        for(int numOfVisited=0; numOfVisited <= vertices.Length || !end.visited; numOfVisited++){
+        for(int numOfVisited=0; numOfVisited <= vertices.Length || !visited[end.Index]; numOfVisited++){
             // assign cost to curr.neighbors
             foreach(Vertex cnbr in curr.neighbors){
                 
-                Vertex.Cost tempcost = new Vertex.Cost(
-                    (curr.prevVertex != null ? curr.prevVertex.cost.G : 0) 
+                Cost tempcost = new Cost(
+                    (curr.prevVertex != null ? costs[curr.prevVertex.Index].G : 0)  
                     + Vector3.Subtract(curr.Location, cnbr.Location).LengthSquared(),  
                     Vector3.Subtract(curr.Location, end.Location).LengthSquared()
                 );
 
-                if(cnbr.cost == null || tempcost.G < cnbr.cost.G ) cnbr.cost = tempcost;
+                if(costs[cnbr.Index] == null || tempcost.G < costs[cnbr.Index].G ) 
+                    costs[cnbr.Index] = tempcost;
 
                 if(
                     cnbr.prevVertex == null ||
-                    curr.cost.G < cnbr.prevVertex.cost.G 
+                    //prevVertex[cnbr.Index] == null ||
+                    costs[curr.Index].G < costs[cnbr.prevVertex.Index].G 
+                    //costs[curr.Index].G < costs[prevVertex[cnbr.Index]].G 
                 )
                     cnbr.prevVertex = curr;
+                    //prevVertex[cnbr.Index] = curr.Index;
             }
 
-            curr.visited = true;
+            visited[curr.Index] = true;
             List<Vertex> unvisited_costed_vertices = new List<Vertex>();
             foreach(Vertex v in vertices)
-                if(!v.visited && v.cost != null) unvisited_costed_vertices.Add(v);
+                if(!visited[v.Index] && costs[v.Index] != null) unvisited_costed_vertices.Add(v);
             
             if(unvisited_costed_vertices.Count <= 0) break;
 
             Vertex leastF = unvisited_costed_vertices[0];
             foreach(Vertex ucv in unvisited_costed_vertices)
-                if(ucv.cost.F < leastF.cost.F) leastF = ucv;
+                if(costs[ucv.Index].F < costs[leastF.Index].F) leastF = ucv;
 
             curr = leastF;
         }
