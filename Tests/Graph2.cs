@@ -89,10 +89,9 @@ public class Map2Test
     
     [Theory]
     [InlineData(0, 5, new uint[]{0,1,2,3,4,5})]
-    //[InlineData(79, 81, new uint[]{79,61,80,81})] // ambiguous result but still correct
+    [InlineData(79, 81, new uint[]{79,61,62,81})] // ambiguous result
     [InlineData(130, 131, new uint[]{130,113,96,79,61,80,97,114,131})]
-    //[InlineData(127,134, new uint[]{})]
-    [InlineData(130, 140, new uint[]{130,113,96,79,61,62,63,64,65,66,67,68,69,70,71,89,106,123,140})] // the rubber banding case
+    [InlineData(130, 140, new uint[]{130,113,96,79,61,62,63,64,65,66,67,68,69,70,71,89,106,123,140})] // the rubber banding case [FIXED]
     public void TestingSP2(int from, int to, uint[] expected_res){
 
         uint[] actual_res = g.getShortestPathIndexes(
